@@ -1,0 +1,97 @@
+<div nz-row nzJustify="left">
+  <div nz-col nzXl="24">
+    <button nz-button nzType="primary" (click)="showModal('add')">Add Category</button>
+    <!-- <button nz-button nzType="primary" (click)="exportAs('xlsx')" [nzLoading]="exporting">export as Excel</button> -->
+  </div>
+</div>
+
+<form>
+  <div class="form-group form-inline">
+    Search:
+    <input class="form-control ml-2" [formControl]='searchTerm' />
+    <span class="ml-3" *ngIf="service.loading$ | async">Loading...</span>
+  </div>
+  <table class="table table-hover" *ngIf="categoriesList && categoriesList.length">
+    <thead>
+      <tr>
+        <th scope="col" sortable="name" (sort)="onSort($event)">Name</th>
+        <th scope="col" sortable="createdAt" (sort)="onSort($event)">Created At</th>
+        <th scope="col" >Actions</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr *ngFor="let category of categories$ | async">
+        <td>
+          <ngb-highlight [result]="category.name" [term]="service.searchTerm">
+          </ngb-highlight>
+        </td>
+        <td>
+          <ngb-highlight [result]="category.created_at | date: 'short'" [term]="service.searchTerm">
+          </ngb-highlight>
+        </td>
+
+        <td>
+          <button nz-button nzType="default" (click)="showModal('update', category)">Edit</button>
+          <a nz-popconfirm
+            nzPopconfirmTitle="Are you sure to delete this category?"
+            nzPopconfirmPlacement="left" (nzOnConfirm)="deleteCategory(category)" (nzOnCancel)="cancel()">
+            <button nz-button nzType="primary" nzDanger>Delete</button>
+          </a>
+          <!-- <button nz-button nzType="primary" routerLink="/categories/view/{{category.id}}">View</button> -->
+        </td>
+      </tr>
+    </tbody>
+  </table>
+
+  <div class="d-flex justify-content-between p-2">
+    <div class="pagination">
+      <a (click)="service.page > 1 && pagination(service.page-1)">&laquo;</a>
+      <ng-container *ngFor="let item of arrayOne(pagesCount); let i = index;">
+        <a [ngClass]="service.page === (i+1) ? 'active' : ''" (click)="pagination(i+1)">{{i + 1}}</a>
+      </ng-container>
+      <a (click)="pagesCount > service.page && pagination(service.page+1)">&raquo;</a>
+    </div>
+    <select class="custom-select" style="width: auto" name="pageSize" [(ngModel)]="service.pageSize"
+      (ngModelChange)="changeItemsPerPage()">
+      <option [ngValue]="10">10</option>
+      <option [ngValue]="20">20</option>
+      <option [ngValue]="50">50</option>
+    </select>
+  </div>
+</form>
+
+<div *ngIf="categoriesList && !categoriesList.length">
+  <nz-empty nzNotFoundImage="https://gw.alipayobjects.com/zos/antfincdn/ZHrcdLPrvN/empty.svg"
+    [nzNotFoundContent]="contentTpl">
+    <ng-template #contentTpl>
+      <span> No Data </span>
+    </ng-template>
+  </nz-empty>
+</div>
+
+<div *ngIf="addCategory">
+  <app-category-add (categoryModalShow)="categoryModalShow($event)" (categoryAdded)="loadCategories($event)">
+  </app-category-add>
+</div>
+<div *ngIf="updateCategory">
+  <app-category-update [category]="selectedCategory" (categoryModalShow)="updateCategoryModalShow($event)"
+    (categoryUpdated)="loadCategories($event)">
+  </app-category-update>
+</div>
+
+
+ <!--  this table for exporting xlsx not viewing -->
+<table id="exportingTable" *ngIf="categoriesToExport" style="display: none;">
+  <thead>
+    <tr>
+      <th>Name</th>
+      <th>Created At</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr *ngFor="let category of categoriesToExport">
+      <td>{{category.name}}</td>
+      <td>{{category.created_at | date: 'short'}}</td>
+    </tr>
+  </tbody>
+</table>

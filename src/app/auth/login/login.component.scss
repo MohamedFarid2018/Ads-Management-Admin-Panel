@@ -1,0 +1,30 @@
+.logo {
+    text-align: center;
+    height: 40px;
+    line-height: 40px;
+    cursor: pointer;
+    margin-bottom: 24px;
+
+    img {
+        width: 40px;
+        margin-right: 8px;
+    }
+
+    span {
+        vertical-align: text-bottom;
+        font-size: 16px;
+        text-transform: uppercase;
+        display: inline-block;
+    }
+}
+
+
+.forget-pass {
+    color: #007bff;
+    text-decoration: none;
+    background-color: transparent;
+}
+.forget-pass:hover {
+    color: #0056b3;
+    text-decoration: underline;
+}

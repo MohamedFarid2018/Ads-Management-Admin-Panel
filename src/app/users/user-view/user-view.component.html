@@ -1,0 +1,5 @@
+<nz-descriptions nzTitle="User Info" *ngIf="user">
+  <nz-descriptions-item nzTitle="User Name">{{user.name ? user.name : 'not added'}}</nz-descriptions-item>
+  <nz-descriptions-item nzTitle="Phone">{{user.phone || 'not added'}}</nz-descriptions-item>
+  <nz-descriptions-item nzTitle="Email">{{user.email || 'not added'}}</nz-descriptions-item>
+</nz-descriptions>

@@ -1,0 +1,18 @@
+<nz-modal [(nzVisible)]="isVisible" nzTitle="Update Category" (nzOnCancel)="handleCancel()" (nzOnOk)="handleOk()">
+    <div>
+        <form nz-form [formGroup]="updateCategoryForm">
+            <nz-form-item>
+                <label>Name <span class="manditory">*</span></label>
+                <nz-form-control nzErrorTip="Please input Name!">
+                    <nz-input-group>
+                        <input formControlName="name" nz-input placeholder="Name" />
+                    </nz-input-group>
+                </nz-form-control>
+            </nz-form-item>
+        </form>
+    </div>
+    <div *nzModalFooter>
+        <button nz-button nzType="default" (click)="handleCancel()">cancel</button>
+        <button nz-button nzType="primary" (click)="handleOk()">Update Category</button>
+    </div>
+</nz-modal>

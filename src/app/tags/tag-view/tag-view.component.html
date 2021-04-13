@@ -1,0 +1,7 @@
+<nz-descriptions nzTitle="Tag Info" *ngIf="tag">
+  <nz-descriptions-item nzTitle="Name">{{tag.name ? tag.name : 'not added'}}</nz-descriptions-item>
+  <nz-descriptions-item nzTitle="Price">{{tag.price ? tag.price : 'not added'}}</nz-descriptions-item>
+  <nz-descriptions-item nzTitle="Number of Months">{{tag.numberOfMonths ? tag.numberOfMonths : 'not added'}}</nz-descriptions-item>
+  <nz-descriptions-item nzTitle="created At">{{tag.createdAt |  date: 'short'}}</nz-descriptions-item>
+</nz-descriptions>
+

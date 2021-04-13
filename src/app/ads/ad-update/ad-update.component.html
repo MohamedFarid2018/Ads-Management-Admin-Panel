@@ -1,0 +1,93 @@
+<nz-modal [(nzVisible)]="isVisible" nzTitle="Update Ad" (nzOnCancel)="handleCancel()" (nzOnOk)="handleOk()">
+    <div>
+      <form nz-form [formGroup]="updateAdForm">
+        <nz-form-item>
+          <label for="price">Select Type <span class="manditory">*</span></label>
+          <nz-form-control nzErrorTip="Please Select Type!">
+            <nz-select nzShowSearch nzAllowClear nzPlaceHolder="Select a Type" formControlName="type">
+              <nz-option *ngFor="let type of types" nzValue="{{type.value}}" nzLabel="{{type.label}}">
+              </nz-option>
+            </nz-select>
+          </nz-form-control>
+        </nz-form-item>
+        <nz-form-item>
+          <label>Title <span class="manditory">*</span></label>
+          <nz-form-control nzErrorTip="Please input Title!">
+            <nz-input-group nzPrefixIcon="build">
+              <input formControlName="title" nz-input placeholder="Title" />
+            </nz-input-group>
+          </nz-form-control>
+        </nz-form-item>
+        <nz-form-item>
+          <label>Description <span class="manditory">*</span></label>
+          <nz-form-control nzErrorTip="Please input Description!">
+            <nz-input-group nzPrefixIcon="build">
+              <input formControlName="description" nz-input placeholder="Description" />
+            </nz-input-group>
+          </nz-form-control>
+        </nz-form-item>
+        <nz-form-item>
+          <label for="price">Select Category <span class="manditory">*</span></label>
+          <nz-form-control nzErrorTip="Please Select Category!">
+            <nz-select nzShowSearch nzAllowClear nzPlaceHolder="Select a Category" formControlName="category">
+              <nz-option *ngFor="let category of categories" nzValue="{{category._id}}" nzLabel="{{category.name}}">
+              </nz-option>
+            </nz-select>
+          </nz-form-control>
+        </nz-form-item>
+        <nz-form-item>
+          <label for="price">Select tags <span class="manditory">*</span></label>
+          <nz-form-control nzErrorTip="Please Select tags!">
+            <nz-select nzMode="multiple" nzShowSearch nzAllowClear nzPlaceHolder="Select a tags" formControlName="tags">
+              <nz-option *ngFor="let tag of tags" nzValue="{{tag._id}}" nzLabel="{{tag.name}}"></nz-option>
+            </nz-select>
+          </nz-form-control>
+        </nz-form-item>
+        <nz-form-item>
+          <label for="price">Select Advertiser <span class="manditory">*</span></label>
+          <nz-form-control nzErrorTip="Please Select Advertiser!">
+            <nz-select nzShowSearch nzAllowClear nzPlaceHolder="Select a Advertiser" formControlName="advertiser">
+              <nz-option *ngFor="let advertiser of users" nzValue="{{advertiser._id}}" nzLabel="{{advertiser.name}}">
+              </nz-option>
+            </nz-select>
+          </nz-form-control>
+        </nz-form-item>
+        <nz-form-item>
+          <label for="name">Start Date<span class="manditory">*</span></label>
+          <nz-form-control nzErrorTip="Please select Start Date!">
+            <nz-date-picker [nzDisabledDate]="disabledDate" formControlName="startDate">
+            </nz-date-picker>
+          </nz-form-control>
+        </nz-form-item>
+        <nz-form-item>
+          <label for="name">End Date<span class="manditory">*</span></label>
+          <nz-form-control nzErrorTip="Please select End Date!">
+            <nz-date-picker [nzDisabledDate]="disabledDate" formControlName="endDate">
+            </nz-date-picker>
+          </nz-form-control>
+        </nz-form-item>
+        <nz-form-item>
+          <label>Upload Ad Image </label>
+          <nz-upload nzListType="picture-card" [nzBeforeUpload]="beforeUpload"
+            [nzShowUploadList]="{showRemoveIcon: true, showPreviewIcon: true}" [nzShowButton]="fileList.length < 1"
+            [(nzFileList)]="fileList" [nzPreview]="handlePreview" [nzMultiple]="true" (nzChange)="handleChange($event)">
+            <div>
+              <i nz-icon nzType="plus"></i>
+              <div style="margin-top: 8px">Select File</div>
+            </div>
+          </nz-upload>
+          <nz-modal [nzVisible]="previewVisible" [nzContent]="modalContent" [nzFooter]="null"
+            (nzOnCancel)="previewVisible = false">
+            <ng-template #modalContent>
+              <img [src]="previewImage" [ngStyle]="{ width: '100%' }" />
+            </ng-template>
+          </nz-modal>
+        </nz-form-item>
+      </form>
+    </div>
+    <div *nzModalFooter>
+      <button nz-button nzType="default" (click)="handleCancel()">cancel</button>
+      <button nz-button nzType="primary" [disabled]="uploading" (click)="handleOk()">Update Ad</button>
+    </div>
+  </nz-modal>
+  

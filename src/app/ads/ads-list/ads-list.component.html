@@ -1,0 +1,152 @@
+<div nz-row nzJustify="left">
+  <div nz-col nzXl="24">
+    <button nz-button nzType="primary" (click)="showModal('add')">Add Ad</button>
+    <!-- <button nz-button nzType="primary" (click)="exportAs('xlsx')" [nzLoading]="exporting">export as Excel</button> -->
+  </div>
+</div>
+<div class="form-group form-inline">
+  <div>
+    Search:
+    <input class="form-control ml-2" [formControl]='searchTerm' />
+    &nbsp;&nbsp;&nbsp;
+    Select Category&nbsp;
+    <nz-select nzPlaceHolder="Select Category" name="category" [(ngModel)]="selectedCategory" (ngModelChange)="listAds()">
+        <nz-option *ngFor="let category of categories" nzValue="{{category._id}}" nzLabel="{{category.name}}"></nz-option>
+    </nz-select>
+  </div>
+</div>
+<div class="form-group form-inline">
+  Select Tags&nbsp;
+  <nz-select nzPlaceHolder="Select Tag" name="area" [(ngModel)]="selectedTag" (ngModelChange)="listAds()">
+    <nz-option *ngFor="let area of tags" nzValue="{{area._id}}" nzLabel="{{area.name}}"></nz-option>
+  </nz-select>
+  &nbsp;&nbsp;&nbsp;
+    Select Advertiser&nbsp;
+    <nz-select nzPlaceHolder="Select User" name="user" [(ngModel)]="selectedUser" (ngModelChange)="listAds()">
+        <nz-option *ngFor="let user of users" nzValue="{{user._id}}" nzLabel="{{user.name}}"></nz-option>
+    </nz-select>
+  <span class="ml-3" *ngIf="service.loading$ | async">Loading...</span>
+</div>
+<form *ngIf="adsList && adsList.length">
+  <table id="mytable" class="table table-hover">
+    <thead>
+      <tr>
+        <th scope="col" sortable="name" (sort)="onSort($event)">Title</th>
+        <th scope="col" sortable="name" (sort)="onSort($event)">Advertiser</th>
+        <th scope="col" sortable="name" (sort)="onSort($event)">Category</th>
+        <th scope="col" sortable="name" (sort)="onSort($event)">Tags</th>
+        <th scope="col" sortable="name" (sort)="onSort($event)">Start Date</th>
+        <th scope="col" sortable="name" (sort)="onSort($event)">End Date</th>
+        <th scope="col" sortable="spoc" (sort)="onSort($event)">Type</th>
+        <th scope="col" sortable="createdAt" (sort)="onSort($event)">Created At</th>
+        <th scope="col">Actions</th>
+        <th scope="col" > </th>
+        <th scope="col" > </th>
+
+      </tr>
+    </thead>
+    <tbody>
+      <tr *ngFor="let ad of ads$ | async">
+        <td>
+          <ngb-highlight [result]="ad.title" [term]="service.searchTerm">
+          </ngb-highlight>
+        </td>
+        <td>
+          <ngb-highlight [result]="ad.advertiser ? ad.advertiser.name : ''" [term]="service.searchTerm">
+          </ngb-highlight>
+        </td>
+        <td>
+          <ngb-highlight [result]="ad.category ? ad.category.name : ''" [term]="service.searchTerm">
+          </ngb-highlight>
+        </td>
+        <td>
+          <ngb-highlight [result]="getAdTags(ad.tags)" [term]="service.searchTerm">
+          </ngb-highlight>
+        </td>
+        <td>
+          <ngb-highlight [result]="getAdDate(ad.startDate)" [term]="service.searchTerm">
+          </ngb-highlight>
+        </td>
+        <td>
+          <ngb-highlight [result]="getAdDate(ad.endDate)" [term]="service.searchTerm">
+          </ngb-highlight>
+        </td>
+        <td>
+          <ngb-highlight [result]="ad.type[0].toUpperCase() + ad.type.slice(1)" [term]="service.searchTerm">
+          </ngb-highlight>
+        </td>
+        <td>
+          <ngb-highlight [result]="ad.created_at | date: 'short'" [term]="service.searchTerm">
+          </ngb-highlight>
+        </td>
+
+        <td>
+          <button nz-button nzType="default" (click)="showModal('update', ad)">Edit</button>
+          <!-- <button nz-button nzType="primary" nzDanger (click)="deleteAdConfirm(ad)">Delete</button> -->
+          
+          <a *ngIf="!ad.isDeleted" nz-popconfirm
+            nzPopconfirmTitle="Are you sure to delete an ad for {{ad.name}}?"
+            nzPopconfirmPlacement="left" (nzOnConfirm)="deleteAd(ad)" (nzOnCancel)="cancel()">
+            <button nz-button nzType="primary" nzDanger>Delete</button>
+          </a>
+          <!-- <button nz-button nzType="primary" routerLink="/ads/view/{{ad.id}}">View</button> -->
+        </td>
+        <td> </td>
+        <td> </td>
+      </tr>
+    </tbody>
+  </table>
+
+  <div class="d-flex justify-content-between p-2">
+    <div class="pagination">
+      <a (click)="service.page > 1 && pagination(service.page-1)">&laquo;</a>
+      <ng-container *ngFor="let item of arrayOne(pagesCount); let i = index;">
+        <a [ngClass]="service.page === (i+1) ? 'active' : ''" (click)="pagination(i+1)">{{i + 1}}</a>
+      </ng-container>
+      <a (click)="pagesCount > service.page && pagination(service.page+1)">&raquo;</a>
+    </div>
+    <select class="custom-select" style="width: auto" name="pageSize" [(ngModel)]="service.pageSize"
+      (ngModelChange)="changeItemsPerPage()">
+      <option [ngValue]="10">10</option>
+      <option [ngValue]="20">20</option>
+      <option [ngValue]="50">50</option>
+    </select>
+  </div>
+</form>
+
+<div *ngIf="adsList && !adsList.length">
+  <nz-empty nzNotFoundImage="https://gw.alipayobjects.com/zos/antfincdn/ZHrcdLPrvN/empty.svg"
+    [nzNotFoundContent]="contentTpl">
+    <ng-template #contentTpl>
+      <span> No Data </span>
+    </ng-template>
+  </nz-empty>
+</div>
+
+<div *ngIf="addAd">
+  <app-ad-create (adModalShow)="adModalShow($event)" (adAdded)="loadAds($event)">
+  </app-ad-create>
+</div>
+<div *ngIf="updateAd">
+  <app-ad-update [ad]="selectedAd" (adModalShow)="updateAdModalShow($event)"
+    (adUpdated)="loadAds($event)"></app-ad-update>
+</div>
+
+
+<!--  this table for exporting xlsx not viewing -->
+<table id="exportingTable" *ngIf="dateToExport" style="display: none;">
+  <thead>
+    <tr>
+      <th>Name</th>
+      <th>Url</th>
+      <th>Created At</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr *ngFor="let data of dateToExport">
+      <td>{{data.name}}</td>
+      <td>{{data.url}}</td>
+      <td>{{data.created_at | date: 'short'}}</td>
+    </tr>
+  </tbody>
+</table>

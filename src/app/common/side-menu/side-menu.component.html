@@ -1,0 +1,33 @@
+<ul nz-menu nzTheme="dark" nzMode="inline" [nzInlineCollapsed]="isCollapsed"
+    *ngIf="currenRolePermission && !currenRolePermission.includes('user')">
+    <!-- make resrvation section opend when load -->
+    <!-- <li nz-submenu nzOpen nzTitle="Reservation" nzIcon="account-book"> -->
+    <li nz-submenu nzTitle="Users" nzIcon="usergroup-add">
+        <ul>
+            <li nz-menu-item nzMatchRouter>
+                <a routerLink="/users">Advertisers List</a>
+            </li>
+        </ul>
+    </li>
+    <li nz-submenu nzTitle="Ads" nzIcon="dollar">
+        <ul>
+            <li nz-menu-item nzMatchRouter>
+                <a routerLink="/ads/list">Ads list</a>
+            </li>
+        </ul>
+    </li>
+    <li nz-submenu nzTitle="Categories" nzIcon="apartment">
+        <ul>
+            <li nz-menu-item nzMatchRouter>
+                <a routerLink="/categories/list">Categories List</a>
+            </li>
+        </ul>
+    </li>
+    <li nz-submenu nzTitle="Tags" nzIcon="tags">
+        <ul>
+            <li nz-menu-item nzMatchRouter>
+                <a routerLink="/tags/list">Tags List</a>
+            </li>
+        </ul>
+    </li>
+</ul>

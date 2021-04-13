@@ -1,0 +1,64 @@
+<div nz-row nzJustify="center">
+    <div nz-col nzXs="24" nzSm="12" nzMd="6" nzLg="6" nzXl="6">
+        <div class="form" *ngIf="!isAuth && loginForm">
+            <nz-card>
+                <div class="logo">
+                    <span>Admin Panel</span>
+                </div>
+                <form nz-form class="login-form" [formGroup]="loginForm" (ngSubmit)="submitForm()"
+                    *ngIf="!showForgetPasswordForm">
+                    <nz-form-item>
+                        <nz-form-control nzHasFeedback [nzErrorTip]="emailErrorTpl">
+                            <input nz-input formControlName="emailOrPhone" placeholder="email or phone" type="text" />
+                            <ng-template #emailErrorTpl let-control>
+                                <ng-container *ngIf="control.hasError('required')">
+                                    Please input your Email or Phone!
+                                </ng-container>
+                            </ng-template>
+                        </nz-form-control>
+                    </nz-form-item>
+                    <nz-form-item>
+                        <nz-form-control nzHasFeedback nzErrorTip="Please input your password!">
+                            <input nz-input type="password" placeholder="password" formControlName="password" />
+                        </nz-form-control>
+                    </nz-form-item>
+                    <div nz-row nzJustify="center">
+                        <nz-form-item>
+                            <nz-form-control>
+                                <button nz-button nzType="primary" [nzLoading]="isLoading">Login</button>
+                            </nz-form-control>
+                        </nz-form-item>
+                    </div>
+                    <!-- <div nz-row nzJustify="center">
+                        <nz-form-item>
+                            <a class="forget-pass" (click)="showForgetPasswordForm=true">Forgot your password?</a>
+                        </nz-form-item>
+                    </div> -->
+                </form>
+
+                <!-- reset pass form  -->
+                <form nz-form class="reset-passc-form" [formGroup]="resetForm" *ngIf="showForgetPasswordForm">
+                    <div nz-row nzJustify="center">
+                        <div nz-col nzLg="24">
+                            <nz-form-item>
+                                <nz-form-control>
+                                    <input nz-input (input)="checkEmailIfExist()" formControlName="resetemail" placeholder="Your Email Address"
+                                        type="email" />
+                                </nz-form-control>
+                            </nz-form-item>
+                        </div>
+                    </div>
+                    <div nz-row nzJustify="center">
+                        <nz-form-item>
+                            <nz-form-control>
+                                <button [disabled]="resetForm.invalid || notFound" nz-button nzType="primary" (click)="sentResetLink()">Reset My Password</button>
+                            </nz-form-control>
+                        </nz-form-item>
+                    </div>
+                  <nz-result *ngIf="notFound" nzSubTitle="Sorry, This email not found.">
+                  </nz-result>
+                </form>
+            </nz-card>
+        </div>
+    </div>
+</div>

@@ -1,0 +1,21 @@
+<nz-layout class="app-layout">
+  <nz-sider id="sidebar" class="menu-sidebar" nzCollapsible nzWidth="256px" nzBreakpoint="md" [(nzCollapsed)]="isCollapsed"
+    [nzTrigger]="null" *ngIf="isAuth">
+    <div class="sidebar-logo">
+      <a target="_blank">
+        <img src="https://ng.ant.design/assets/img/logo.svg" alt="logo">
+        <h1>Al Admin Panel</h1>
+      </a>
+    </div>
+    <app-side-menu [isCollapsed]="isCollapsed"></app-side-menu>
+  </nz-sider>
+  <nz-layout>
+    <!-- <app-header (toggleMenu)="checkMenuShow($event)" *ngIf="isAuth"></app-header> -->
+    <app-header (toggleMenu)="checkMenuShow($event)"></app-header>
+    <nz-content>
+      <div class="inner-content">
+        <router-outlet></router-outlet>
+      </div>
+    </nz-content>
+  </nz-layout>
+</nz-layout>

@@ -1,0 +1,22 @@
+<div nz-row nzJustify="center">
+    <div nz-col nzXl="24">
+        <nz-modal [(nzVisible)]="isVisible" nzTitle="Add Tag" (nzOnCancel)="handleCancel()" (nzOnOk)="handleOk()">
+            <div>
+                <form nz-form [formGroup]="addTagForm" (ngSubmit)="handleOk()">
+                    <nz-form-item>
+                        <label for="name">Name <span class="manditory">*</span></label>
+                        <nz-form-control nzErrorTip="Please input tag name!">
+                            <nz-input-group nzPrefixIcon="user">
+                                <input formControlName="name" nz-input placeholder="Name" />
+                            </nz-input-group>
+                        </nz-form-control>
+                    </nz-form-item>
+                </form>
+            </div>
+            <div *nzModalFooter>
+                <button nz-button nzType="default" (click)="handleCancel()">cancel</button>
+                <button nz-button nzType="primary" (click)="handleOk()">Add Tag</button>
+            </div>
+        </nz-modal>
+    </div>
+</div>
